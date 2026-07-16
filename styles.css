@@ -30,6 +30,16 @@ html, body {
     padding: 0;
 }
 
+/* The download page has more content than fits one fixed
+   viewport on small screens — let it scroll there instead
+   of clipping. */
+html:has(body.download), body.download {
+    height: auto;
+    min-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 /* Chalkboard-style wordmark used site-wide */
 .logo1 {
     margin-top: 8vh;
@@ -109,6 +119,9 @@ body {
     background:
         radial-gradient(ellipse at 50% -10%, rgba(255,255,255,0.6), transparent 55%),
         linear-gradient(180deg, var(--cream) 0%, #EFDCC3 100%);
+    justify-content: flex-start;
+    padding-top: 4vh;
+    padding-bottom: 40px;
 }
 
 img {
@@ -274,8 +287,8 @@ video {
 body .download {
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: flex-start;
+    min-height: 100vh;
     margin: 0;
     flex-direction: column;
 }
@@ -284,8 +297,11 @@ body .download {
 .main-container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     gap: 40px;
+    width: 100%;
+    max-width: 1000px;
+    box-sizing: border-box;
 }
 
 #finalCanvas {
@@ -334,15 +350,17 @@ body .download {
 
 .button-last{
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     margin-top: 50px;
     padding: 10px 20px;
     font-size: 16px;
     border: none;
     color: var(--foam);
+    justify-content: center;
 }
 
-/* -- NEW: customizable frame controls -- */
+/* -- customizable frame controls -- */
 
 .right h3 {
     font-family: 'Fraunces', serif;
@@ -411,6 +429,29 @@ body .download {
 }
 
 
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablets / small laptops: keep side-by-side, tighten spacing */
+@media (max-width: 900px) {
+
+    .main-container {
+        gap: 24px;
+        padding: 0 16px;
+    }
+
+    .right {
+        margin-left: 0;
+    }
+
+    #finalCanvas {
+        max-width: 55vw;
+    }
+}
+
+/* Phones and narrow tablets: stack canvas above controls,
+   let the page scroll instead of clipping/side-scrolling */
 @media (max-width: 768px) {
 
     .logo1 {
@@ -423,7 +464,6 @@ body .download {
         padding-top: 20px;
         padding-bottom: 20px;
     }
-
 
     button {
         font-size: 20px;
@@ -438,43 +478,46 @@ body .download {
         text-align: center;
         font-size: 14px;
         max-width: 90%;
-        margin-top: 50px;
         padding: 5px 10px;
     }
 
+    body.download {
+        padding: 20px 4vw 60px;
+        gap: 16px;
+        overflow-x: hidden;
+    }
+
     .main-container {
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
-        gap: 20px;
-        max-width: 100vw;
-        flex-wrap: wrap;
-        overflow-x: auto;
-        white-space: nowrap;
-        padding: 10px;
-        margin-bottom: 50px;
+        gap: 24px;
+        max-width: 100%;
+        flex-wrap: nowrap;
+        overflow-x: visible;
+        white-space: normal;
+        padding: 0;
+        margin-bottom: 0;
     }
 
     .right {
         margin-left: 0;
-        max-width: 100%;
+        width: 100%;
+        max-width: 420px;
         flex-shrink: 0;
+        box-sizing: border-box;
     }
 
     #finalCanvas {
-        width: 100%;
-        max-width: 40vw;
+        width: auto;
+        max-width: 82vw;
         height: auto;
-        max-height: 60vh;
+        max-height: 55vh;
         object-fit: contain;
-        flex-shrink: 0;
-    }
-
-    body {
-        overflow-x: auto;
+        margin: 0 auto;
     }
 
     .camera-container {
-        max-width: 80%;
+        max-width: 90%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -487,49 +530,36 @@ body .download {
         max-width: 100%;
         border-width: 12px;
     }
+
+    .color-grid,
+    .icon-grid {
+        max-width: 300px;
+        margin: 0 auto;
+    }
 }
 
+/* Small phones */
 @media (max-width: 480px) {
 
     .logo1 {
         font-size: 32px;
-        margin-bottom: 50px;
+        margin-bottom: 30px;
     }
 
     img {
         max-width: 200px;
         display: block;
         padding-top: 10px;
-        margin-bottom: 50px;
+        margin-bottom: 30px;
     }
 
     button {
-        font-size: 20px;
+        font-size: 18px;
         padding: 8px 14px;
-        display: block;
-        margin-top: 50px;
-    }
-
-    .main-container {
-        flex-direction: row;
-        align-items: center;
-        gap: 10px;
-        max-width: 100vw;
-        flex-wrap: wrap;
-        overflow-x: auto;
-        white-space: nowrap;
-        margin-bottom: 0;
-        padding-bottom: 25px;
     }
 
     .footer-text {
-        position: fixed;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        text-align: center;
         font-size: 10px;
-        max-width: 90%;
         background: rgba(255, 253, 249, 0.85);
         padding: 5px 10px;
     }
@@ -539,12 +569,18 @@ body .download {
     }
 
     .color-btn {
-        width: 60px;
-        height: 60px;
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
         border: 3px solid var(--foam);
         cursor: pointer;
         transition: transform 0.2s ease-in-out;
+    }
+
+    .icon-btn {
+        width: 52px;
+        height: 52px;
+        font-size: 22px;
     }
 
     .camera-container {
@@ -567,5 +603,19 @@ body .download {
 
     #counter {
         font-size: 16px;
+    }
+
+    #finalCanvas {
+        max-width: 88vw;
+        padding: 10px;
+    }
+
+    .right {
+        padding: 14px;
+        gap: 14px;
+    }
+
+    .button-last {
+        margin-top: 20px;
     }
 }
