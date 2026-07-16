@@ -5,7 +5,7 @@ const colorButtons = document.querySelectorAll(".color-btn");
 
 let selectedFrameColor = "img/nude.jpg"; // Default frame
 
-const capturedPhotos = JSON.parse(sessionStorage.getItem("capturedPhotos")) || [];
+let capturedPhotos = JSON.parse(sessionStorage.getItem("capturedPhotos")) || [];
 
 if (capturedPhotos.length === 0) {
     console.error("No photos found in sessionStorage.");
@@ -16,74 +16,60 @@ const canvasWidth = 240;
 const imageHeight = 160;
 const spacing = 10;
 const framePadding = 10;
-const bottomPadding = 20;
+const logoSpace = 100; // Keep this so your photobooth layout stays the same
 
 finalCanvas.width = canvasWidth;
 finalCanvas.height =
     framePadding +
     (imageHeight + spacing) * capturedPhotos.length +
-    bottomPadding;
+    logoSpace;
 
-// Helper function to load images
-function loadImage(src) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
+// Function to draw the collage
+function drawCollage() {
+    const background = new Image();
+    background.src = selectedFrameColor;
 
-        img.onload = () => resolve(img);
-        img.onerror = () => reject(`Failed to load ${src}`);
-
-        img.src = src;
-    });
-}
-
-// Draw collage
-async function drawCollage() {
-    try {
-        const background = await loadImage(selectedFrameColor);
-
-        const photos = await Promise.all(
-            capturedPhotos.map(photo => loadImage(photo))
-        );
-
+    background.onload = () => {
         ctx.clearRect(0, 0, finalCanvas.width, finalCanvas.height);
+        ctx.drawImage(background, 0, 0, finalCanvas.width, finalCanvas.height);
 
-        // Draw background/frame
-        ctx.drawImage(
-            background,
-            0,
-            0,
-            finalCanvas.width,
-            finalCanvas.height
-        );
+        capturedPhotos.forEach((photo, index) => {
+            const img = new Image();
+            img.src = photo;
 
-        // Draw photos
-        photos.forEach((img, index) => {
-            const x = framePadding;
-            const y = framePadding + index * (imageHeight + spacing);
+            img.onload = () => {
+                const x = framePadding;
+                const y = framePadding + index * (imageHeight + spacing);
 
-            ctx.drawImage(
-                img,
-                x,
-                y,
-                canvasWidth - framePadding * 2,
-                imageHeight
-            );
+                ctx.drawImage(
+                    img,
+                    x,
+                    y,
+                    canvasWidth - 2 * framePadding,
+                    imageHeight
+                );
+            };
+
+            img.onerror = () =>
+                console.error(`Failed to load image ${index + 1}`);
         });
 
-    } catch (err) {
-        console.error(err);
-    }
+        // Logo removed
+    };
+
+    background.onerror = () =>
+        console.error("Failed to load background image.");
 }
 
-// Change frame
+// Change frame color
 colorButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        selectedFrameColor = button.dataset.color;
+    button.addEventListener("click", (event) => {
+        selectedFrameColor = event.target.getAttribute("data-color");
         drawCollage();
     });
 });
 
-// Download image
+// Download the final image
 downloadBtn.addEventListener("click", () => {
     const link = document.createElement("a");
     link.href = finalCanvas.toDataURL("image/png");
@@ -91,5 +77,5 @@ downloadBtn.addEventListener("click", () => {
     link.click();
 });
 
-// Initial draw
+// Initial drawing
 drawCollage();
