@@ -15,7 +15,7 @@ function redirectWithTransition(url) {
     
     // Trigger fade-in effect
     setTimeout(() => {
-        overlay.style.opacity = ".3";
+        overlay.style.opacity = ".5";
     }, 10);
     
     // Redirect after transition
