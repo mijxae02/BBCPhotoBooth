@@ -85,10 +85,6 @@ body {
     color: var(--coffee-black);
 }
 
-/* -- Page grounds, built from gradients so nothing depends on
-      a missing image file. Swap in url('img/bg.png') on any of
-      these if you'd rather use a photographed backdrop. -- */
-
 .home{
     background:
         radial-gradient(ellipse at 50% -10%, rgba(255,255,255,0.6), transparent 55%),
@@ -122,8 +118,6 @@ img {
     margin: 0 auto;
 }
 
-/* Decorative steam-cup mark that replaces the old .star image.
-   Pure CSS/SVG, no external asset required. */
 .star{
     margin-top: -10px;
     width: 110px;
@@ -161,7 +155,6 @@ img {
     .steam-cup .steam { animation: none; opacity: 0.5; }
 }
 
-/* Chalkboard tagline chip */
 .chalk-tagline{
     font-family: 'Caveat', cursive;
     font-size: clamp(20px, 2.6vw, 30px);
@@ -262,8 +255,6 @@ video {
     -moz-transform: scaleX(-1);
 }
 
-/* Countdown text */
-
 #countdown {
     font-size: clamp(18px, 2vw, 24px);
     font-weight: bold;
@@ -349,6 +340,73 @@ body .download {
     font-size: 16px;
     border: none;
     color: var(--foam);
+}
+
+/* -- NEW: customizable frame controls -- */
+
+.right h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    margin: 6px 0 2px;
+    color: var(--coffee-black);
+}
+
+.receipt-note {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--cocoa);
+    margin: -6px 0 6px;
+}
+
+.color-btn.selected {
+    border-color: var(--rust);
+    box-shadow: 0 0 0 3px var(--rust);
+}
+
+.custom-swatch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: repeating-conic-gradient(#ccc 0% 25%, #eee 0% 50%) 50% / 16px 16px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.custom-swatch input[type="color"] {
+    width: 140%;
+    height: 140%;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+}
+
+.icon-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-content: center;
+}
+
+.icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn svg {
+    width: 34px;
+    height: 34px;
+}
+
+.icon-btn:hover {
+    transform: scale(1.08);
+}
+
+.icon-btn.selected {
+    border-color: var(--rust);
+    box-shadow: 0 0 0 3px var(--rust);
+    background: rgba(200,137,88,0.25);
 }
 
 
@@ -509,4 +567,297 @@ body .download {
     #counter {
         font-size: 16px;
     }
+}
+
+/* -- NEW: filmstrip / legit photobooth styling -- */
+
+.canvas-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#finalCanvas {
+    cursor: crosshair;
+    transition: transform 0.2s ease;
+}
+
+#finalCanvas.pop {
+    animation: canvas-pop 0.4s ease;
+}
+
+@keyframes canvas-pop {
+    0%   { transform: scale(1); }
+    35%  { transform: scale(1.03) rotate(-0.6deg); }
+    70%  { transform: scale(0.99) rotate(0.4deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+/* Flash-bulb intro overlay, sits on top of the canvas */
+#flash-overlay {
+    position: absolute;
+    inset: 14px; /* match #finalCanvas padding so it covers just the strip */
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 4px;
+}
+
+#flash-overlay.flash-fire {
+    opacity: 1;
+    animation: flash-flicker 0.22s steps(2, end);
+}
+
+#flash-overlay.flash-fade {
+    opacity: 1;
+    animation: flash-fade-out 0.7s ease forwards;
+}
+
+@keyframes flash-flicker {
+    0%   { opacity: 1; }
+    50%  { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+@keyframes flash-fade-out {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.hint {
+    font-family: 'League Spartan', serif;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--cocoa);
+    display: block;
+    margin-top: 2px;
+}
+
+.receipt-note {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--cocoa);
+    margin: -6px 0 6px;
+}
+
+.right h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    margin: 6px 0 2px;
+    color: var(--coffee-black);
+}
+
+/* Filter chooser */
+.filter-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    max-width: 260px;
+}
+
+.filter-btn {
+    font-size: 13px;
+    padding: 8px 12px;
+    background: var(--foam);
+    color: var(--coffee-black);
+    border: 2px solid var(--caramel);
+    box-shadow: none;
+}
+
+.filter-btn:hover {
+    background: var(--caramel);
+    color: var(--foam);
+}
+
+.filter-btn.selected {
+    background: var(--rust);
+    color: var(--foam);
+    border-color: var(--rust);
+}
+
+/* Color swatches */
+.color-btn.selected {
+    border-color: var(--rust);
+    box-shadow: 0 0 0 3px var(--rust);
+}
+
+.custom-swatch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: repeating-conic-gradient(#ccc 0% 25%, #eee 0% 50%) 50% / 16px 16px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.custom-swatch input[type="color"] {
+    width: 140%;
+    height: 140%;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    background: none;
+}
+
+/* Texture buttons */
+.pattern-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.pattern-btn {
+    font-size: 13px;
+    padding: 8px 14px;
+    background: var(--foam);
+    color: var(--coffee-black);
+    border: 2px solid var(--caramel);
+    box-shadow: none;
+}
+
+.pattern-btn:hover {
+    background: var(--caramel);
+    color: var(--foam);
+}
+
+.pattern-btn.selected {
+    background: var(--rust);
+    color: var(--foam);
+    border-color: var(--rust);
+}
+
+/* Toggle checkboxes for vignette / grain / timestamp */
+.toggle-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    font-family: 'League Spartan', serif;
+    font-size: 13px;
+    color: var(--cocoa);
+}
+
+.toggle-row label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.toggle-row input[type="checkbox"] {
+    accent-color: var(--rust);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+/* Caption input */
+#caption-input {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    padding: 8px 14px;
+    border: 2px solid var(--caramel);
+    border-radius: 8px;
+    background: var(--foam);
+    color: var(--coffee-black);
+    width: 220px;
+    text-align: center;
+}
+
+#caption-input:focus {
+    outline: none;
+    border-color: var(--rust);
+}
+
+/* Sticker palette */
+.icon-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-content: center;
+}
+
+.icon-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    border: 3px solid var(--foam);
+    background: rgba(255,253,249,0.6);
+    font-size: 26px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+    box-shadow: 0 3px 8px rgba(42,27,18,0.15);
+}
+
+.icon-btn:hover {
+    transform: scale(1.08);
+}
+
+.icon-btn.armed {
+    border-color: var(--rust);
+    box-shadow: 0 0 0 3px var(--rust);
+    background: rgba(200,137,88,0.3);
+    animation: armed-bounce 0.6s ease infinite;
+}
+
+@keyframes armed-bounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+}
+
+/* Sticker tool buttons */
+.sticker-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.sticker-tools button {
+    font-size: 13px;
+    padding: 8px 12px;
+    box-shadow: 0 3px 0 var(--coffee-black);
+}
+
+#surprise-btn {
+    background-color: var(--cocoa);
+}
+
+#surprise-btn:hover {
+    background-color: var(--caramel);
+}
+
+/* Gentle pulse on Download */
+#download-btn {
+    animation: pulse-glow 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 4px 0 var(--coffee-black), 0 0 0 rgba(168,81,43,0); }
+    50%      { box-shadow: 0 4px 0 var(--coffee-black), 0 0 16px rgba(168,81,43,0.55); }
+}
+
+/* Confetti burst */
+.confetti-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+.confetti-piece {
+    position: absolute;
+    top: -40px;
+    animation-name: confetti-fall;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+@keyframes confetti-fall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
 }

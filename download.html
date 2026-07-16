@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,500..700&family=Caveat:wght@500;700&family=Kreon:wght@300..700&family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,500..700&family=Caveat:wght@500;700&family=Kreon:wght@300..700&family=League+Spartan:wght@100..900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="img/logo.png">
 </head>
 <body class="download">
@@ -17,34 +17,82 @@
     </div>
 
     <div class="main-container">
-        <canvas id="finalCanvas"></canvas>
+        <div class="canvas-wrap">
+            <canvas id="finalCanvas"></canvas>
+            <div id="flash-overlay"></div>
+        </div>
 
         <div class="right">
-            <h2>Choose your frame</h2>
+            <h2>Develop your strip</h2>
             <p class="receipt-note">one shot, freshly poured</p>
 
+            <h3>Filter</h3>
+            <div class="filter-grid">
+                <button class="filter-btn selected" data-filter="original">Original</button>
+                <button class="filter-btn" data-filter="bw">B&amp;W</button>
+                <button class="filter-btn" data-filter="sepia">Sepia</button>
+                <button class="filter-btn" data-filter="vintage">Vintage</button>
+                <button class="filter-btn" data-filter="cool">Cool</button>
+                <button class="filter-btn" data-filter="warm">Warm</button>
+                <button class="filter-btn" data-filter="contrast">Bold</button>
+            </div>
+
+            <h3>Strip color</h3>
             <div class="color-grid">
-                <button class="color-btn" data-color="img/nude.jpg" style="background-image: url('img/nude.jpg');"></button>
-                <button class="color-btn" data-color="img/lilac.jpg" style="background-image: url('img/lilac.jpg');"></button>
-                <button class="color-btn" data-color="img/blue.jpg" style="background-image: url('img/blue.jpg');"></button>
-                <button class="color-btn" data-color="img/red.jpg" style="background-image: url('img/red.jpg');"></button>
-                <button class="color-btn" data-color="img/cobalt.jpg" style="background-image: url('img/cobalt.jpg');"></button>
-                <button class="color-btn" data-color="img/matcha.jpg" style="background-image: url('img/matcha.jpg');"></button>
-                <button class="color-btn" data-color="img/valentines.png" style="background-image: url('img/valentines.png');"></button>
-                <button class="color-btn" data-color="img/valentines1.png" style="background-image: url('img/valentines1.png');"></button>
-                <button class="color-btn" data-color="img/valentines2.png" style="background-image: url('img/valentines2.png');"></button>
-                <button class="color-btn" data-color="img/yellow.jpg" style="background-image: url('img/yellow.jpg');"></button>
-                <button class="color-btn" data-color="img/black.jpg" style="background-image: url('img/black.jpg');"></button>
-                <button class="color-btn" data-color="img/purple.jpg" style="background-image: url('img/purple.jpg');"></button>
-                <button class="color-btn" data-color="img/green.jpg" style="background-image: url('img/green.jpg');"></button>
-                <button class="color-btn" data-color="img/bgg.jpg" style="background-image: url('img/bgg.jpg');"></button>
-                <button class="color-btn" data-color="img/1.png" style="background-image: url('img/1.png');"></button>
-                <button class="color-btn" data-color="img/2.png" style="background-image: url('img/2.png');"></button>
-                <button class="color-btn" data-color="img/3.png" style="background-image: url('img/3.png');"></button>
-                <button class="color-btn" data-color="img/4.png" style="background-image: url('img/4.png');"></button>
-                <button class="color-btn" data-color="img/5.png" style="background-image: url('img/5.png');"></button>
-                <button class="color-btn" data-color="img/6.png" style="background-image: url('img/6.png');"></button>
-                <button class="color-btn" data-color="img/7.png" style="background-image: url('img/7.png');"></button>
+                <button class="color-btn selected" data-color="#F6E9D8" style="background-color:#F6E9D8;"></button>
+                <button class="color-btn" data-color="#FFFDF9" style="background-color:#FFFDF9;"></button>
+                <button class="color-btn" data-color="#C68958" style="background-color:#C68958;"></button>
+                <button class="color-btn" data-color="#A8512B" style="background-color:#A8512B;"></button>
+                <button class="color-btn" data-color="#4A2E1E" style="background-color:#4A2E1E;"></button>
+                <button class="color-btn" data-color="#2A1B12" style="background-color:#2A1B12;"></button>
+                <label class="color-btn custom-swatch" for="custom-color">
+                    <input type="color" id="custom-color" value="#F6E9D8">
+                </label>
+            </div>
+
+            <h3>Texture</h3>
+            <div class="pattern-grid">
+                <button class="pattern-btn selected" data-pattern="solid">Clean</button>
+                <button class="pattern-btn" data-pattern="dots">Dots</button>
+                <button class="pattern-btn" data-pattern="stripes">Stripes</button>
+                <button class="pattern-btn" data-pattern="speckle">Speckle</button>
+            </div>
+
+            <div class="toggle-row">
+                <label><input type="checkbox" id="vignette-toggle" checked> Vignette</label>
+                <label><input type="checkbox" id="grain-toggle" checked> Film grain</label>
+                <label><input type="checkbox" id="timestamp-toggle" checked> Timestamp</label>
+            </div>
+
+            <h3>Caption</h3>
+            <input type="text" id="caption-input" maxlength="28" placeholder="add a little note...">
+
+<h3>Stickers <span class="hint">(tap a sticker, then tap the strip to stamp it — drag to move, double-tap to remove)</span></h3>
+            <div class="icon-grid">
+                <button class="icon-btn" data-type="cup" title="Cup">
+                    <svg viewBox="0 0 48 48"><ellipse cx="24" cy="39" rx="14" ry="3.5" fill="#FFFDF9"/><path d="M11 20h26l-3 22a2 2 0 0 1-2 2H16a2 2 0 0 1-2-2z" fill="#A8512B"/><path d="M35 25a5 5 0 0 1 0 10" fill="none" stroke="#A8512B" stroke-width="3"/><path d="M17 15q-3-5 0-9M24 15q-3-5 0-9M31 15q-3-5 0-9" fill="none" stroke="#6F4630" stroke-width="2.4" stroke-linecap="round" opacity="0.6"/></svg>
+                </button>
+                <button class="icon-btn" data-type="bean" title="Bean">
+                    <svg viewBox="0 0 48 48"><ellipse cx="24" cy="24" rx="14" ry="20" transform="rotate(35 24 24)" fill="#6F4630"/><path d="M22 6q6 18 0 36" fill="none" stroke="#2A1B12" stroke-width="2.4"/></svg>
+                </button>
+                <button class="icon-btn" data-type="heart" title="Heart">
+                    <svg viewBox="0 0 48 48"><path d="M24 40C4 26 8 8 24 16 40 8 44 26 24 40Z" fill="#A8512B"/></svg>
+                </button>
+                <button class="icon-btn" data-type="star" title="Star">
+                    <svg viewBox="0 0 48 48"><polygon points="24,4 30,18 45,18 33,28 37,43 24,34 11,43 15,28 3,18 18,18" fill="#C68958"/></svg>
+                </button>
+                <button class="icon-btn" data-type="sparkle" title="Sparkle">
+                    <svg viewBox="0 0 48 48"><path d="M24 4C24 16 24 16 36 24 24 32 24 32 24 44 24 32 24 32 12 24 24 16 24 16 24 4Z" fill="#2A1B12"/></svg>
+                </button>
+                <button class="icon-btn" data-type="leaf" title="Leaf">
+                    <svg viewBox="0 0 48 48"><path d="M24 44C4 34 8 12 24 6 40 12 44 34 24 44Z" fill="#6E8B4A"/><line x1="24" y1="40" x2="24" y2="8" stroke="#3F5A2A" stroke-width="2"/></svg>
+                </button>
+            </div>
+
+            <div class="sticker-tools">
+                <button id="undo-btn">↩ Undo</button>
+                <button id="clear-btn">🧹 Clear</button>
+                <button id="surprise-btn">🎲 Surprise me</button>
             </div>
 
             <div class="button-last">
