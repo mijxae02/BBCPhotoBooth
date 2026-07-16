@@ -3,15 +3,17 @@ const ctx = finalCanvas.getContext("2d");
 const downloadBtn = document.getElementById("download-btn");
 const colorButtons = document.querySelectorAll(".color-btn");
 
-let selectedFrameColor = "img/nude.png"; // Default frame
+// Default frame (matches your HTML)
+let selectedFrameColor = "img/nude.jpg";
 
-let capturedPhotos = JSON.parse(sessionStorage.getItem("capturedPhotos")) || [];
+const capturedPhotos =
+    JSON.parse(sessionStorage.getItem("capturedPhotos")) || [];
 
 if (capturedPhotos.length === 0) {
-    console.error("No photos found in sessionStorage.");
+    console.error("No photos found.");
 }
 
-// Canvas dimensions
+// Canvas settings
 const canvasWidth = 240;
 const imageHeight = 160;
 const spacing = 10;
@@ -19,68 +21,106 @@ const framePadding = 10;
 const logoSpace = 100;
 
 finalCanvas.width = canvasWidth;
-finalCanvas.height = framePadding + (imageHeight + spacing) * capturedPhotos.length + logoSpace;
+finalCanvas.height =
+    framePadding +
+    (imageHeight + spacing) * capturedPhotos.length +
+    logoSpace;
 
-// Function to draw the collage
-function drawCollage() {
-    const background = new Image();
-    background.src = selectedFrameColor;
+// Load image helper
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
 
-    background.onload = () => {
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(`Failed to load ${src}`);
+
+        img.src = src;
+    });
+}
+
+// Draw everything
+async function drawCollage() {
+    try {
+        // Load background
+        const background = await loadImage(selectedFrameColor);
+
+        // Load logo
+        const logo = await loadImage("img/logo.png");
+
+        // Load all captured photos
+        const photos = await Promise.all(
+            capturedPhotos.map(photo => loadImage(photo))
+        );
+
+        // Clear canvas
         ctx.clearRect(0, 0, finalCanvas.width, finalCanvas.height);
-        ctx.drawImage(background, 0, 0, finalCanvas.width, finalCanvas.height);
 
-        capturedPhotos.forEach((photo, index) => {
-            const img = new Image();
-            img.src = photo;
+        // Background
+        ctx.drawImage(
+            background,
+            0,
+            0,
+            finalCanvas.width,
+            finalCanvas.height
+        );
 
-            img.onload = () => {
-                const x = framePadding;
-                const y = framePadding + index * (imageHeight + spacing);
-                ctx.drawImage(img, x, y, canvasWidth - 2 * framePadding, imageHeight);
-            };
+        // Photos
+        photos.forEach((img, index) => {
 
-            img.onerror = () => console.error(`Failed to load image ${index + 1}`);
+            const x = framePadding;
+            const y = framePadding + index * (imageHeight + spacing);
+
+            ctx.drawImage(
+                img,
+                x,
+                y,
+                canvasWidth - framePadding * 2,
+                imageHeight
+            );
         });
 
-        // Draw the logo immediately after the background
-        drawLogo();
-    };
-
-    background.onerror = () => console.error("Failed to load background image.");
-}
-
-// Function to draw the logo
-function drawLogo() {
-    const logo = new Image();
-    logo.src = "img/logo.png";
-
-    logo.onload = () => {
+        // Logo
         const logoWidth = 80;
-        const logoHeight = 20;
+        const logoHeight = 80; // preserve aspect ratio better
         const logoX = (canvasWidth - logoWidth) / 2;
-        const logoY = finalCanvas.height - logoSpace + 35;
-        ctx.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
-    };
+        const logoY = finalCanvas.height - logoSpace + 10;
 
-    logo.onerror = () => console.error("Failed to load logo image.");
+        ctx.drawImage(
+            logo,
+            logoX,
+            logoY,
+            logoWidth,
+            logoHeight
+        );
+
+    } catch (err) {
+        console.error(err);
+    }
 }
 
-// Change frame color and redraw instantly
+// Change frame
 colorButtons.forEach(button => {
-    button.addEventListener("click", (event) => {
-        selectedFrameColor = event.target.getAttribute("data-color");
+
+    button.addEventListener("click", () => {
+
+        selectedFrameColor = button.dataset.color;
+
         drawCollage();
     });
+
 });
 
-// Download the final image
+// Download
 downloadBtn.addEventListener("click", () => {
+
     const link = document.createElement("a");
-    link.href = finalCanvas.toDataURL("image/png");
+
     link.download = "photobooth.png";
+    link.href = finalCanvas.toDataURL("image/png");
+
     link.click();
+
 });
 
-// Initial drawing
+// Initial draw
 drawCollage();
