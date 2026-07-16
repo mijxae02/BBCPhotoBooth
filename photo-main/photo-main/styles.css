@@ -1,0 +1,512 @@
+/* ============================================
+   BERN THE BEANS PHOTOBOOTH
+   Coffee-shop theme — a menu-board sign,
+   an espresso-stage camera room, and a
+   receipt-style download counter.
+   ============================================ */
+
+:root{
+    /* -- palette: roasted, poured, chalked -- */
+    --coffee-black:  #2A1B12;   /* espresso, deep text/bg */
+    --espresso:      #4A2E1E;   /* stage curtain brown */
+    --cocoa:         #6F4630;   /* muted secondary text */
+    --caramel:       #C68958;   /* warm mid accent / borders */
+    --rust:          #A8512B;   /* CTA / primary accent */
+    --cream:         #F6E9D8;   /* latte foam page background */
+    --foam:          #FFFDF9;   /* milk-foam white */
+    --chalk:         #F3EFE6;   /* chalk lettering on board */
+
+    /* legacy variable names kept so nothing else silently breaks */
+    --primary-color: var(--rust);
+    --text-color: var(--coffee-black);
+    --accent-color: var(--caramel);
+    --white: var(--foam);
+}
+
+html, body {
+    overflow: hidden;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Chalkboard-style wordmark used site-wide */
+.logo1 {
+    margin-top: 8vh;
+    font-family: 'Fraunces', serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: italic;
+    font-size: clamp(28px, 4.2vw, 64px);
+    text-align: center;
+    color: var(--coffee-black);
+    letter-spacing: 0.01em;
+}
+
+.logo1::after{
+    content: "";
+    display: block;
+    width: 72px;
+    height: 3px;
+    margin: 14px auto 0;
+    background: var(--rust);
+    border-radius: 2px;
+}
+
+.logo2 {
+    padding-left: 2em;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 22px;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    color: var(--coffee-black);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: 'Kreon', serif;
+    text-align: center;
+    gap: min(5vh, 60px);
+    padding: 5vh 5vw;
+    box-sizing: border-box;
+    overflow: hidden;
+    color: var(--coffee-black);
+}
+
+/* -- Page grounds, built from gradients so nothing depends on
+      a missing image file. Swap in url('img/bg.png') on any of
+      these if you'd rather use a photographed backdrop. -- */
+
+.home{
+    background:
+        radial-gradient(ellipse at 50% -10%, rgba(255,255,255,0.6), transparent 55%),
+        repeating-linear-gradient(90deg, rgba(0,0,0,0.015) 0 2px, transparent 2px 4px),
+        linear-gradient(180deg, var(--cream) 0%, #EFDCC3 100%);
+}
+
+.instructions{
+    background:
+        radial-gradient(ellipse at 50% -10%, rgba(255,255,255,0.5), transparent 55%),
+        linear-gradient(180deg, #F1E2CC 0%, var(--cream) 100%);
+}
+
+.photobooth{
+    background:
+        radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.06), transparent 60%),
+        linear-gradient(180deg, var(--espresso) 0%, var(--coffee-black) 100%);
+    color: var(--chalk);
+}
+
+.download{
+    background:
+        radial-gradient(ellipse at 50% -10%, rgba(255,255,255,0.6), transparent 55%),
+        linear-gradient(180deg, var(--cream) 0%, #EFDCC3 100%);
+}
+
+img {
+    max-width: 80%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Decorative steam-cup mark that replaces the old .star image.
+   Pure CSS/SVG, no external asset required. */
+.star{
+    margin-top: -10px;
+    width: 110px;
+    height: 110px;
+}
+
+.steam-cup {
+    display: block;
+    margin: 0 auto;
+    width: 96px;
+    height: auto;
+    overflow: visible;
+}
+
+.steam-cup .steam {
+    stroke: var(--cocoa);
+    stroke-width: 5;
+    stroke-linecap: round;
+    fill: none;
+    opacity: 0.7;
+    transform-origin: center;
+    animation: rise 3s ease-in-out infinite;
+}
+.steam-cup .steam.s2 { animation-delay: 0.6s; }
+.steam-cup .steam.s3 { animation-delay: 1.2s; }
+
+@keyframes rise {
+    0%   { transform: translateY(6px) scaleY(0.9); opacity: 0; }
+    25%  { opacity: 0.75; }
+    70%  { opacity: 0.35; }
+    100% { transform: translateY(-14px) scaleY(1.05); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .steam-cup .steam { animation: none; opacity: 0.5; }
+}
+
+/* Chalkboard tagline chip */
+.chalk-tagline{
+    font-family: 'Caveat', cursive;
+    font-size: clamp(20px, 2.6vw, 30px);
+    color: var(--chalk);
+    background: var(--coffee-black);
+    display: inline-block;
+    padding: 10px 26px;
+    border-radius: 6px;
+    transform: rotate(-1.2deg);
+    box-shadow: 0 6px 14px rgba(42,27,18,0.25);
+}
+
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--foam);
+    font-family: 'Kreon', serif;
+    font-size: clamp(16px, 2vw, 20px);
+    background-color: var(--rust);
+    padding: 12px 26px;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 8px;
+    box-shadow: 0 4px 0 var(--coffee-black);
+}
+
+#ready-btn, #start-btn{
+    position: fixed;
+    bottom: calc(56px + 56px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+a{
+    text-decoration: none;
+}
+
+button:hover{
+    color: var(--coffee-black);
+    background-color: var(--caramel);
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 var(--coffee-black);
+}
+#ready-btn:hover, #start-btn:hover{
+    transform: translateX(-50%) translateY(2px);
+}
+
+.footer-text {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'League Spartan', serif;
+    font-size: clamp(12px, 1.2vw, 14px);
+    font-weight: 500;
+    text-align: center;
+    max-width: 90%;
+    color: var(--cocoa);
+}
+
+
+/*PHOTOBOOTH*/
+
+.photobooth {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.camera-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 90%;
+    max-width: 960px;
+    padding: 16px;
+    height: 100vh;
+    justify-content: center;
+}
+
+video {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border: 16px solid var(--foam);
+    background-color: var(--coffee-black);
+    border-radius: 8px;
+    box-shadow: 0 0 0 4px var(--caramel), 0 20px 40px rgba(0,0,0,0.45);
+    transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+}
+
+/* Countdown text */
+
+#countdown {
+    font-size: clamp(18px, 2vw, 24px);
+    font-weight: bold;
+    color: var(--chalk);
+    text-align: center;
+    font-family: 'Fraunces', serif;
+}
+
+#counter {
+    font-size: clamp(16px, 1.8vw, 20px);
+    color: var(--caramel);
+}
+
+
+/*DOWNLOAD*/
+
+body .download {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+}
+
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+#finalCanvas {
+    max-width: 70vw;
+    max-height: 70vh;
+    background: var(--foam);
+    padding: 14px;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(42,27,18,0.25);
+}
+
+.right {
+    margin-left: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(255,253,249,0.5);
+}
+
+
+.color-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 10px;
+    justify-content: center;
+}
+
+.color-btn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 5px solid var(--foam);
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 3px 8px rgba(42,27,18,0.2);
+}
+
+.color-btn:hover {
+    transform: scale(1.1);
+}
+
+.button-last{
+    display: flex;
+    gap: 8px;
+    margin-top: 50px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    color: var(--foam);
+}
+
+
+@media (max-width: 768px) {
+
+    .logo1 {
+        font-size: 8vw;
+        margin-top: 7vh;
+    }
+
+    img {
+        max-width: 300px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+
+    button {
+        font-size: 20px;
+        padding: 10px 16px;
+    }
+
+    .footer-text {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        font-size: 14px;
+        max-width: 90%;
+        margin-top: 50px;
+        padding: 5px 10px;
+    }
+
+    .main-container {
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+        max-width: 100vw;
+        flex-wrap: wrap;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 10px;
+        margin-bottom: 50px;
+    }
+
+    .right {
+        margin-left: 0;
+        max-width: 100%;
+        flex-shrink: 0;
+    }
+
+    #finalCanvas {
+        width: 100%;
+        max-width: 40vw;
+        height: auto;
+        max-height: 60vh;
+        object-fit: contain;
+        flex-shrink: 0;
+    }
+
+    body {
+        overflow-x: auto;
+    }
+
+    .camera-container {
+        max-width: 80%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        height: 100vh;
+    }
+
+    video {
+        max-width: 100%;
+        border-width: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .logo1 {
+        font-size: 32px;
+        margin-bottom: 50px;
+    }
+
+    img {
+        max-width: 200px;
+        display: block;
+        padding-top: 10px;
+        margin-bottom: 50px;
+    }
+
+    button {
+        font-size: 20px;
+        padding: 8px 14px;
+        display: block;
+        margin-top: 50px;
+    }
+
+    .main-container {
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        max-width: 100vw;
+        flex-wrap: wrap;
+        overflow-x: auto;
+        white-space: nowrap;
+        margin-bottom: 0;
+        padding-bottom: 25px;
+    }
+
+    .footer-text {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        font-size: 10px;
+        max-width: 90%;
+        background: rgba(255, 253, 249, 0.85);
+        padding: 5px 10px;
+    }
+
+    h2{
+        font-size: 20px;
+    }
+
+    .color-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 3px solid var(--foam);
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .camera-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        height: 100vh;
+    }
+
+    video {
+        border-width: 8px;
+        border-radius: 6px;
+    }
+
+    #countdown {
+        font-size: 18px;
+    }
+
+    #counter {
+        font-size: 16px;
+    }
+}

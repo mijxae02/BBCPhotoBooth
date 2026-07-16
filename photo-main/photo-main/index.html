@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bern The Beans PhotoBooth</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,500..700&family=Caveat:wght@500;700&family=Kreon:wght@300..700&family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/logo.png">
+</head>
+<body class="home">
+
+    <div>
+        <h1 class="logo1">Bern The Beans Cafe</h1>
+        <p class="chalk-tagline">snap. sip. smile.</p>
+    </div>
+
+    <div class="star">
+        <svg class="steam-cup" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+            <path class="steam s1" d="M30 30 C 26 22, 34 18, 30 10" />
+            <path class="steam s2" d="M48 30 C 44 22, 52 18, 48 10" />
+            <path class="steam s3" d="M66 30 C 62 22, 70 18, 66 10" />
+            <path d="M18 38 h48 v22 a24 24 0 0 1 -24 24 h0 a24 24 0 0 1 -24 -24 z"
+                  fill="#4A2E1E" stroke="#2A1B12" stroke-width="3"/>
+            <path d="M66 44 h8 a9 9 0 0 1 0 18 h-8" fill="none" stroke="#2A1B12" stroke-width="4"/>
+            <ellipse cx="42" cy="38" rx="24" ry="5" fill="#C68958" stroke="#2A1B12" stroke-width="3"/>
+        </svg>
+    </div>
+
+    <div>
+        <button id="ready-btn" onclick="redirectWithTransition('instructions.html')">Order Up ☕</button>
+    </div>
+
+    <p class="footer-text">Bern The Beans Photobooth &mdash; freshly brewed memories, one shot at a time.</p>
+
+    <script src="transition.js"></script>
+</body>
+</html>
