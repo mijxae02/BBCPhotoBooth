@@ -93,6 +93,13 @@ function startCamera() {
 
     console.log("Requesting camera with constraints:", videoConstraints);
 
+    // Mirror the LIVE PREVIEW only for front camera
+    if (selectedFacingMode === "user") {
+        video.style.transform = "scaleX(-1)";
+    } else {
+        video.style.transform = "scaleX(1)";
+    }
+
     navigator.mediaDevices.getUserMedia(videoConstraints)
         .then(stream => {
             console.log("Camera stream acquired");
@@ -142,7 +149,8 @@ function capturePhoto() {
     canvas.height = selectedSize.height;
     const ctx = canvas.getContext("2d");
 
-    // Only flip horizontally for front camera (mirror effect)
+    // Only flip the CAPTURED image for front camera (mirror effect)
+    // Back camera should capture exactly what the sensor sees — no flip
     if (selectedFacingMode === "user") {
         ctx.translate(canvas.width, 0);
         ctx.scale(-1, 1);
