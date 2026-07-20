@@ -1,3 +1,5 @@
+console.log("script.js loaded");
+
 const video = document.getElementById("video");
 const countdownEl = document.getElementById("countdown");
 const counterEl = document.getElementById("counter");
@@ -17,46 +19,45 @@ const countdownSound = new Audio("countdown.mp3");
 
 const capturedPhotos = [];
 let capturedCount = 0;
-
-// Adjust constraints for mobile
 const isMobile = window.innerWidth <= 600;
-const videoConstraints = {
-    video: {
-        facingMode: "user", // Use front camera on mobile
-        width: isMobile ? { ideal: 480 } : { ideal: 640 },
-        height: isMobile ? { ideal: 640 } : { ideal: 480 }
-    }
-};
 
-// Fix for mobile Chrome black screen issue
-video.setAttribute("playsinline", true);
-video.setAttribute("autoplay", true);
-video.setAttribute("muted", true);
+// Wait for setup.js to tell us the user hit Start
+window.addEventListener("startPhotobooth", () => {
+    console.log("startPhotobooth event received");
+    startCamera();
+});
 
-// Start webcam
-navigator.mediaDevices.getUserMedia(videoConstraints)
-    .then(stream => {
-        video.srcObject = stream;
-        video.play();
-        startCaptureProcess();
-    })
-    .catch(err => console.error("Camera access denied", err));
+function startCamera() {
+    const facing = window.selectedFacing || "user";
 
-// Start auto capture process
-function startCaptureProcess() {
-    capturePhotoWithCountdown();
+    const videoConstraints = {
+        video: {
+            facingMode: facing,
+            width: isMobile ? { ideal: 480 } : { ideal: 640 },
+            height: isMobile ? { ideal: 640 } : { ideal: 480 }
+        }
+    };
+
+    navigator.mediaDevices.getUserMedia(videoConstraints)
+        .then(stream => {
+            video.srcObject = stream;
+            video.play();
+            capturePhotoWithCountdown();
+        })
+        .catch(err => console.error("Camera access denied", err));
 }
 
-// Countdown and capture photo
 function capturePhotoWithCountdown() {
-    if (capturedCount >= 4) {
+    const totalPhotos = window.totalPhotos || 3;
+
+    if (capturedCount >= totalPhotos) {
         redirectToDownload();
         return;
     }
 
     let timeLeft = 3;
     countdownEl.textContent = timeLeft;
-    counterEl.textContent = `${capturedCount}/4`;
+    counterEl.textContent = `${capturedCount}/${totalPhotos}`;
     countdownSound.play();
     const countdownInterval = setInterval(() => {
         timeLeft--;
@@ -74,28 +75,29 @@ function capturePhotoWithCountdown() {
     }, 1000);
 }
 
-// Capture photo
 function capturePhoto() {
+    const totalPhotos = window.totalPhotos || 3;
+    const facing = window.selectedFacing || "user";
+
     const canvas = document.createElement("canvas");
     canvas.width = isMobile ? 480 : 640;
     canvas.height = isMobile ? 640 : 480;
     const ctx = canvas.getContext("2d");
 
-    // Flip canvas horizontally for front camera
-    ctx.translate(canvas.width, 0);
-    ctx.scale(-1, 1);
+    if (facing === "user") {
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+    }
 
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     capturedPhotos.push(canvas.toDataURL("image/png"));
     capturedCount++;
-    counterEl.textContent = `${capturedCount}/4`;
+    counterEl.textContent = `${capturedCount}/${totalPhotos}`;
 
-    // Continue to next photo
     setTimeout(capturePhotoWithCountdown, 1000);
 }
 
-// Shutter animation
 function triggerShutterAnimation() {
     shutterOverlay.style.opacity = "1";
     shutterSound.play();
@@ -104,7 +106,6 @@ function triggerShutterAnimation() {
     }, 100);
 }
 
-// Redirect to download page with captured images
 function redirectToDownload() {
     sessionStorage.setItem("capturedPhotos", JSON.stringify(capturedPhotos));
     window.location.href = "download.html";

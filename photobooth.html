@@ -18,13 +18,30 @@
             BearnTheBeansCafe
         </h1>
     </div>
-    
-    <div class="camera-container">
+
+    <div id="setup-screen">
+        <h2>Choose your camera</h2>
+        <div class="option-group" id="camera-choice">
+            <button class="option-btn active" data-facing="user">🤳 Front</button>
+            <button class="option-btn" data-facing="environment">📷 Back</button>
+        </div>
+
+        <h2>Choose layout</h2>
+        <div class="option-group" id="layout-choice">
+            <button class="option-btn active" data-count="3" data-cols="1">3 Photos (1 column)</button>
+            <button class="option-btn" data-count="6" data-cols="2">6 Photos (2 columns)</button>
+        </div>
+
+        <button id="start-btn">Start Photobooth</button>
+    </div>
+
+    <div class="camera-container" id="camera-screen" style="display:none;">
         <div id="countdown">Taking photo in...</div>
-        <video id="video" autoplay></video>
+        <video id="video" autoplay muted playsinline></video>
         <div id="counter">0/4</div>
     </div>
 
+    <script src="setup.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

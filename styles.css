@@ -619,3 +619,41 @@ body .download {
         margin-top: 20px;
     }
 }
+
+#setup-screen {
+    text-align: center;
+    padding: 2rem;
+}
+
+.option-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.option-btn {
+    padding: 0.75rem 1.25rem;
+    border: 2px solid #ccc;
+    background: white;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.option-btn.active {
+    border-color: #6b4226; /* pick your Bearn the Beans brand color */
+    background: #f2e4d0;
+}
+
+#start-btn {
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+/* If your final result grid lives elsewhere, use this variable */
+.photo-strip {
+    display: grid;
+    grid-template-columns: repeat(var(--photo-cols, 1), 1fr);
+    gap: 8px;
+}
